@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Library</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <div class="header">
+            Books Library
+        </div>
+        
+        <div class="books-container">
+            <div id="add-book" class="add-book">
+                <img  src="assets/add_circle.svg" alt="add book">
+            </div>        
+        </div>
+    </div>
+    
+    <dialog id="add-book-dialog" >
+        <form id="new-book-form">
+            <div>
+                <div>
+                    <label for="title">Title</label>
+                    <input id="title" class="add-title" type="text" >
+                </div>
+                <div>
+                    <label for="author">Author</label>
+                    <input id="author" class="add-author" type="text" >
+                </div>
+                <div>
+                    <label for="pages">Pages</label>
+                    <input id="pages" class="add-pages" type="number" >
+                </div>
+                <div>
+                    <label for="read">Read</label>
+                    <input id="read" class="add-read" type="checkbox" >
+                </div>
+            </div>
+
+            <div class="form-buttons">
+                <button id="confirmBtn" type="submit">Confirm</button>
+                <button id="cancelBtn" formmethod="dialog">Cancel</button>
+            </div>
+        </form>
+    </dialog>
+</body>
+</html>
