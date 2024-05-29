@@ -1,135 +1,140 @@
-const myLibrary = [new Book("Confessions of a mask","Yukio Mishima","224",true)];
-const booksContainer = document.querySelector(".books-container");
 
-
-
-
-// add-book dialog
-
-const showButton = document.querySelector("#add-book");
-const addBookDialog = document.querySelector("#add-book-dialog");
-const newBookForm = document.querySelector("#new-book-form");
-const confirmBtn = addBookDialog.querySelector("#confirmBtn");
-const cancelBtn = addBookDialog.querySelector("#cancelBtn");
-const addTitle = addBookDialog.querySelector(".add-title");
-const addAuthor = addBookDialog.querySelector(".add-author");
-const addPages = addBookDialog.querySelector(".add-pages");
-const readStatus = addBookDialog.querySelector(".add-read");
-
-showButton.addEventListener("click", () => {
-    addBookDialog.showModal();
-});
-
-confirmBtn.addEventListener("click",(e) =>{
-    e.preventDefault();
-    if(addTitle.value === "" || addAuthor.value === "" || addPages.value === "")
+class Book {
+    constructor(title,author,pages,readStatus)
     {
-        alert("Error: empty input field!");
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        if(readStatus)
+        {
+            this.readstatus = "✅"
+        }
+        else
+        {
+            this.readstatus = "❌"
+        }
     }
-    else
-    {
-        
-        myLibrary.push(new Book(addTitle.value,addAuthor.value,addPages.value,readStatus.checked));
-        newBookForm.reset();
-        displayBooks();
-        addBookDialog.close();
-    }
-    
-})
 
-cancelBtn.addEventListener("click", () =>{
-    newBookForm.reset();
-})
-
-
-// book constructor
-function Book(title, author, pages, read)
-{
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    if(read)
+    toggleReadStatus()
     {
-        this.read = "✅";
-    }
-    else
-    {
-        this.read = "❌";
-    }
-    
-    this.info = function()
-    {
-        return (title + " by " + author + ", " +pages + "pages, " + read);
-    }
-}
-
-// reading-status toggle function
-Book.prototype.readToggle = function(){
-    if(this.read === "✅")
-    {
-        this.read = "❌";
-    }
-    else
-    {
-        this.read = "✅";
-    }
-}
-
-// book-display function
-function displayBooks()
-{
-    const books = document.querySelectorAll(".book");
-    for(let i = 0; i < books.length; i++)
-    {
-        books[i].remove();
-    }
-    for(let i = 0; i < myLibrary.length; i++)
-    { 
-            const newDiv = document.createElement("div");
-            newDiv.classList.add("book");
-            newDiv.innerHTML = `<div class="book-title">
-                                    Title: ${myLibrary[i].title}
-                                </div>
-                                <div class="book-author">
-                                    Author: ${myLibrary[i].author}
-                                </div>
-                                <div class="book-pages">
-                                    Pages: ${myLibrary[i].pages}
-                                </div>
-                                <div class="book-read">
-                                    Read: ${myLibrary[i].read}
-                                </div>
-                                <div><button data-position="${i}" class="read-change">Read-status</button>
-                                <button data-position="${i}" class="book-remove">Remove</button></div>`
-                                
-
-            booksContainer.insertBefore(newDiv, showButton);
-            
+        if(this.readstatus === "✅")
+        {
+            this.readstatus = "❌"
+        }
+        else
+        {
+            this.readstatus = "✅"
+        }
         
     }
-            //remove book
-            const removeBook = document.querySelectorAll(".book-remove");
-            removeBook.forEach((item) => {
-                item.addEventListener("click", () =>{
-                myLibrary.splice(item.dataset.position,1);
-                displayBooks();
-            });
-            })
+}
 
+const library = {
 
-            // change read status
-            const toggleReadBtn = document.querySelectorAll(".read-change");
-            toggleReadBtn.forEach((item) => {
-                item.addEventListener("click", () =>{
-                    myLibrary[item.dataset.position].readToggle();
-                    displayBooks(); 
-                })
-            })
-    
+    books: [new Book("Confessions of a mask","Yukio Mishima","224",true)],
+
+    addBook: function(book){
+        this.books.push(book);
+    }
 }
 
 
-displayBooks()
 
+class domHandler {
 
+    constructor()
+    {
+        this.OnloadEventListeners()
+        this.renderBooks()
+    }
+
+    booksContainer = document.querySelector(".books-container")
+    addBookBtn = document.querySelector("#add-book")
+    addBookDialog = document.querySelector("#add-book-dialog")
+    bookForm = document.querySelector("#new-book-form")
+    confirmBtn = this.addBookDialog.querySelector("#confirmBtn")
+    cancelBtn = this.addBookDialog.querySelector("#cancelBtn")
+    titleInputField = this.addBookDialog.querySelector(".add-title")
+    authorInputField = this.addBookDialog.querySelector(".add-author")
+    pagesInputField = this.addBookDialog.querySelector(".add-pages")
+    readstatusChkbx = this.addBookDialog.querySelector(".add-read")
+
+    OnloadEventListeners(){
+        this.addBookBtn.addEventListener("click",()=>{
+            this.addBookDialog.showModal();
+        })
+
+        this.confirmBtn.addEventListener("click",(e)=>{
+            e.preventDefault();
+            if(this.titleInputField.value === "" || this.authorInputField.value === "" || this.pagesInputField === "")
+            {
+                alert("Error: empty input field!")
+            }
+            else
+            {
+                library.addBook(new Book(this.titleInputField.value,this.authorInputField.value,this.pagesInputField.value,this.readstatusChkbx.checked))
+                this.bookForm.reset();
+                this.renderBooks();
+                this.addBookDialog.close();
+            }
+        })
+
+        this.cancelBtn.addEventListener("click",()=>{
+            this.bookForm.reset();
+        })
+    }
+
+    renderBooks(){
+        const books = document.querySelectorAll(".book")
+        books.forEach(book => {
+            book.remove();
+        });
+
+        library.books.forEach((book,index)=> {
+            const div = document.createElement("div")
+            div.classList.add("book")
+            div.innerHTML = `<div class="book-title">
+                                Title: ${book.title}
+                            </div>
+                            <div class="book-author">
+                                Author: ${book.author}
+                            </div>
+                            <div class="book-pages">
+                                Pages: ${book.pages}
+                            </div>
+                            <div class="book-read">
+                                Read: ${book.readstatus}
+                            </div>
+                            <div>
+                                <button data-position="${index}"    class="read-change">Read-status</button>
+                                <button data-position="${index}" class="book-remove">Remove</button>
+                            </div>`;
+            this.booksContainer.insertBefore(div,this.addBookBtn)
+        });
+
+        this.onRenderEventListeners();
+    }
+
+    onRenderEventListeners(){
+        const removeBookBtns = document.querySelectorAll(".book-remove")
+        const toggleReadBtns = document.querySelectorAll(".read-change")
+
+        removeBookBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                library.books.splice(btn.dataset.position,1)
+                this.renderBooks();
+            })
+        })
+
+        toggleReadBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                library.books[btn.dataset.position].toggleReadStatus();
+                this.renderBooks();
+            })
+        })
+    }
+
+}
+
+let Run = new domHandler();
 
