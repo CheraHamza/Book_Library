@@ -11,7 +11,7 @@ class Book {
 	}
 
 	toggleReadStatus() {
-		if (this.readstatus === "✅") {
+		if (this.readstatus == "✅") {
 			this.readstatus = "❌";
 		} else {
 			this.readstatus = "✅";
@@ -118,7 +118,7 @@ function saveLocalLibrary() {
 					title: book.title,
 					author: book.author,
 					pages: book.pages,
-					readstatus: book.readstatus,
+					readstatus: book.readstatus == "✅" ? true : false,
 				},
 			})
 		);
@@ -136,7 +136,7 @@ function retrieveLocalLibrary() {
 				bookObj.data.title,
 				bookObj.data.author,
 				bookObj.data.pages,
-				bookObj.data.readStatus
+				bookObj.data.readstatus
 			);
 			return newBook;
 		});
